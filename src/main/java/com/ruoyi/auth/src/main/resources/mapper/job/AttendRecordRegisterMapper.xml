@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.job.mapper.AttendRecordRegisterMapper">
+    <!--    插入登记时间-->
+    <insert id="insertAttendRecord" parameterType="com.ruoyi.job.domain.AttendRecordRegister">
+        insert into attend_record_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="recordConfigId != null">record_config_id,</if>
+            <if test="registerOrder != null">register_order,</if>
+            <if test="registerTime != null">register_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="delTime != null">del_time,</if>
+            <if test="delUser != null">del_user,</if>
+            <if test="creator != null">creator,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updater != null">updater,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="recordConfigId != null">#{recordConfigId},</if>
+            <if test="registerOrder != null">#{registerOrder},</if>
+            <if test="registerTime != null">#{registerTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updater != null">#{updater},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+</mapper>

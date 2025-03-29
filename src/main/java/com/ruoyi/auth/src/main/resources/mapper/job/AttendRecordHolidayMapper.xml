@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.job.mapper.AttendRecordHolidayMapper">
+    <cache eviction="LRU" flushInterval="3600000" size="1024" readOnly="true"/>
+    <resultMap type="com.ruoyi.job.domain.AttendRecordHoliday" id="AttendRecordHolidayResult">
+        <result property="id"    column="id"    />
+        <result property="year"    column="year"    />
+        <result property="holidayType"    column="holiday_type"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectAttendRecordHolidayVo">
+        select id, year, holiday_type, start_date, end_date, create_time, creator, remark from attend_record_holiday
+    </sql>
+
+    <sql id="selectAttendRecordHolidayBean">
+        t.id, t.year, t.holiday_type holidayType, t.start_date startDate,
+            t.end_date endDate, t.create_time createTime, t.creator, t.remark
+    </sql>
+
+
+    <select id="selectAttendRecordHolidayList" parameterType="com.ruoyi.job.domain.AttendRecordHoliday" resultMap="AttendRecordHolidayResult">
+        <include refid="selectAttendRecordHolidayVo"/>
+        <where>
+            <if test="year != null "> and year = #{year}</if>
+            <if test="holidayType != null  and holidayType != ''"> and holiday_type = #{holidayType}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="creator != null "> and creator = #{creator}</if>
+        </where>
+    </select>
+
+    <select id="selectAttendRecordHolidayById" parameterType="Long" resultMap="AttendRecordHolidayResult">
+        <include refid="selectAttendRecordHolidayVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAttendRecordHoliday" parameterType="com.ruoyi.job.domain.AttendRecordHoliday" useGeneratedKeys="true" keyProperty="id">
+        insert into attend_record_holiday
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="year != null">year,</if>
+            <if test="holidayType != null">holiday_type,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="creator != null">creator,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="year != null">#{year},</if>
+            <if test="holidayType != null">#{holidayType},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAttendRecordHoliday" parameterType="com.ruoyi.job.domain.AttendRecordHoliday">
+        update attend_record_holiday
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null">year = #{year},</if>
+            <if test="holidayType != null">holiday_type = #{holidayType},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAttendRecordHolidayById" parameterType="Long">
+        delete from attend_record_holiday where id = #{id}
+    </delete>
+
+    <delete id="deleteAttendRecordHolidayByIds" parameterType="String">
+        delete from attend_record_holiday where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="justHoliday" resultType="com.ruoyi.job.domain.AttendRecordHoliday">
+        select
+        <include refid="selectAttendRecordHolidayBean"/>
+        from attend_record_holiday t
+        where t.holiday_type = 1
+        and TO_DAYS(t.start_date) <![CDATA[ <= ]]> TO_DAYS(#{date})
+        and TO_DAYS(t.end_date) <![CDATA[ >= ]]> TO_DAYS(#{date})
+    </select>
+
+    <select id="justWorkDay" resultType="com.ruoyi.job.domain.AttendRecordHoliday">
+        select
+        <include refid="selectAttendRecordHolidayBean"/>
+        from attend_record_holiday t
+        where t.holiday_type = 2
+        and TO_DAYS(t.start_date) <![CDATA[ <= ]]> TO_DAYS(#{date})
+        and TO_DAYS(t.end_date) <![CDATA[ >= ]]> TO_DAYS(#{date})
+    </select>
+</mapper>

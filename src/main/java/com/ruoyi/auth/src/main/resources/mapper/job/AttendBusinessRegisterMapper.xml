@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.job.mapper.SysFlowMapper.AttendBusinessRegisterMapper">
+
+    <resultMap type="com.ruoyi.job.domain.SysFlow.AttendBusinessRegister" id="AttendBusinessRegisterResult">
+        <result property="id"    column="id"    />
+        <result property="businessLocation"    column="business_location"    />
+        <result property="businessReason"    column="business_reason"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="state"    column="state"    />
+        <result property="processInstanceId"    column="process_instance_id"    />
+        <result property="businessPeople"    column="business_people"    />
+        <result property="approvalPeople"    column="approval_people"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updater"    column="updater"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.job.vo.AttendBusinessRegisterVo" id="AttendBusinessRegisterVoResult">
+        <result property="id"    column="id"    />
+        <result property="businessLocation"    column="business_location"    />
+        <result property="businessReason"    column="business_reason"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="nickname"    column="nick_name"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="state"    column="state"    />
+        <result property="processInstanceId"    column="process_instance_id"    />
+        <result property="businessPeople"    column="business_people"    />
+        <result property="approvalPeople"    column="approval_people"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updater"    column="updater"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+<!--    <sql id="selectAttendBusinessRegisterVo">-->
+<!--        select id, business_location, business_reason,apply_time ,start_time, end_time, state, process_instance_id, business_people, approval_people, approval_time, del_time, del_user, create_time, creator, update_time, updater, del_flag from attend_business_register-->
+<!--    </sql>-->
+
+    <select id="selectAttendBusinessRegisterList" parameterType="com.ruoyi.job.vo.AttendBusinessRegisterVo" resultMap="AttendBusinessRegisterVoResult">
+        SELECT abr.id, business_location, abr.apply_time, business_reason, start_time, end_time, state, process_instance_id, sd.dept_name,
+        GROUP_CONCAT(DISTINCT tsu.nick_name) as business_people,
+        GROUP_CONCAT(DISTINCT tsu_approval.nick_name) as approval_people,
+        approval_time, del_time, del_user,
+        abr.create_time, creator, abr.update_time, updater, abr.del_flag
+        FROM attend_business_register abr
+        LEFT JOIN attend_user_business aub ON abr.id = aub.business_id
+        LEFT JOIN sys_user tsu ON tsu.user_id = aub.user_id
+        LEFT JOIN sys_user tsu_approval ON tsu_approval.user_id = abr.approval_people
+        left join sys_dept sd on tsu.dept_id = sd.dept_id
+        WHERE abr.del_flag = 0
+        <if test="userId != null and userId != 1 and userId != 2">
+            AND tsu.user_id = #{userId}
+        </if>
+        GROUP BY abr.id, business_location, abr.apply_time, business_reason, start_time, end_time, state, process_instance_id, sd.dept_name,
+        approval_time, del_time, del_user, abr.create_time, creator, abr.update_time, updater, abr.del_flag
+        ORDER BY abr.id DESC
+    </select>
+
+    <select id="selectProcessInstanceIds" resultType="java.lang.String">
+        SELECT process_instance_id
+        FROM attend_bussiness_register
+        where process_instance_id = #{processInstanceId}
+    </select>
+
+<!--    <select id="selectAttendBusinessRegisterById" parameterType="Long" resultMap="AttendBusinessRegisterVoResult">-->
+<!--        SELECT abr.id, business_location,abr.apply_time, business_reason, start_time, end_time, state, process_instance_id, business_people,-->
+<!--        GROUP_CONCAT(nick_name) AS nickname,  &#45;&#45; 合并 nickname 字段-->
+<!--        approval_people, approval_time, del_time, del_user, abr.create_time, creator, abr.update_time, updater, abr.del_flag-->
+<!--        FROM attend_business_register abr-->
+<!--        LEFT JOIN attend_user_business aub ON abr.id = aub.business_id-->
+<!--        LEFT JOIN sys_user tsu ON tsu.user_id = aub.user_id-->
+<!--        WHERE abr.del_flag = 0 AND abr.id = #{id}-->
+<!--    </select>-->
+
+    <insert id="insertAttendBusinessRegister" parameterType="com.ruoyi.job.domain.SysFlow.AttendBusinessRegister" useGeneratedKeys="true" keyProperty="id">
+        insert into attend_business_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="businessLocation != null">business_location,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="businessReason != null">business_reason,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="state != null">state,</if>
+            <if test="processInstanceId != null">process_instance_id,</if>
+            <if test="businessPeople != null">business_people,</if>
+            <if test="approvalPeople != null">approval_people,</if>
+            <if test="approvalTime != null">approval_time,</if>
+            <if test="delTime != null">del_time,</if>
+            <if test="delUser != null">del_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="creator != null">creator,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updater != null">updater,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="businessLocation != null">#{businessLocation},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="businessReason != null">#{businessReason},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="state != null">#{state},</if>
+            <if test="processInstanceId != null">#{processInstanceId},</if>
+            <if test="businessPeople != null">#{businessPeople},</if>
+            <if test="approvalPeople != null">#{approvalPeople},</if>
+            <if test="approvalTime != null">#{approvalTime},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updater != null">#{updater},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+<!--    <update id="updateAttendBusinessRegister" parameterType="com.ruoyi.work.domain.AttendBusinessRegister">-->
+<!--        update attend_business_register-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="businessLocation != null">business_location = #{businessLocation},</if>-->
+<!--            <if test="businessReason != null">business_reason = #{businessReason},</if>-->
+<!--            <if test="applyTime != null">apply_time = #{applyTime},</if>-->
+<!--            <if test="startTime != null">start_time = #{startTime},</if>-->
+<!--            <if test="endTime != null">end_time = #{endTime},</if>-->
+<!--            <if test="state != null">state = #{state},</if>-->
+<!--            <if test="processInstanceId != null">process_instance_id = #{processInstanceId},</if>-->
+<!--            <if test="businessPeople != null">business_people = #{businessPeople},</if>-->
+<!--            <if test="approvalPeople != null">approval_people = #{approvalPeople},</if>-->
+<!--            <if test="approvalTime != null">approval_time = #{approvalTime},</if>-->
+<!--            <if test="delTime != null">del_time = #{delTime},</if>-->
+<!--            <if test="delUser != null">del_user = #{delUser},</if>-->
+<!--            <if test="createTime != null">create_time = #{createTime},</if>-->
+<!--            <if test="creator != null">creator = #{creator},</if>-->
+<!--            <if test="updateTime != null">update_time = #{updateTime},</if>-->
+<!--            <if test="updater != null">updater = #{updater},</if>-->
+<!--            <if test="delFlag != null">del_flag = #{delFlag},</if>-->
+<!--        </trim>-->
+<!--        where id = #{id} and del_flag = 0-->
+<!--    </update>-->
+
+<!--&lt;!&ndash;    逻辑删除&ndash;&gt;-->
+<!--    <update id="deleteAttendBusinessRegisterById" parameterType="Long">-->
+<!--        update attend_business_register set  del_flag = 1 where id = #{id}-->
+<!--    </update>-->
+
+<!--    <update id="deleteAttendBusinessRegisterByIds" parameterType="String">-->
+<!--        update attend_business_register set del_flag = 1 where id in-->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </update>-->
+
+
+<!--    &lt;!&ndash;    将用户id和登记id存放到关系表(批量)&ndash;&gt;-->
+<!--    <insert id="insertUserBusiness" parameterType="list">-->
+<!--        insert into attend_user_business(user_id,business_id) values-->
+<!--        <foreach item="data" collection="list" separator=",">-->
+<!--            (-->
+<!--            #{data.userId},-->
+<!--            #{data.registerId}-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash;    将用户id和登记id存放到关系表&ndash;&gt;-->
+<!--    <insert id="insertUserBusinessOne">-->
+<!--        insert into attend_user_business(user_id,business_id) values (#{businessPeople},#{id})-->
+<!--    </insert>-->
+
+<!--    <select id="getApprovalPeopleList" parameterType="Integer" resultMap="userVoMap">-->
+<!--        SELECT su.user_id, su.dept_id, su.nick_name-->
+<!--        FROM sys_user su-->
+<!--                 JOIN sys_user_post sup ON su.user_id = sup.user_id-->
+<!--                 JOIN (SELECT dept_id FROM sys_user WHERE user_id = #{userId}) sub-->
+<!--        WHERE sup.post_id = 3 AND su.dept_id = sub.dept_id;-->
+<!--    </select>-->
+<!--    <resultMap type="com.ruoyi.work.vo.UserVo" id="userVoMap">-->
+<!--        <result property="userId"    column="user_id"    />-->
+<!--        <result property="nickname"    column="nick_name"    />-->
+<!--        <result property="orgId"    column="dept_id"    />-->
+<!--    </resultMap>-->
+
+    <update id="updateStateByProcessInstanceId">
+        update attend_business_register
+        set state = #{state},
+            update_time = #{updateTime},
+            updater = #{updater}
+        where process_instance_id = #{processInstanceId}
+    </update>
+
+<!--    <select id="getDDUserID" resultType="java.lang.String">-->
+<!--        select dd_user_id from sys_auth_user where user_id = #{id}-->
+<!--    </select>-->
+
+<!--    <select id="getDDDeptID" resultType="java.lang.String">-->
+<!--        select ding_talk_dept_id from sys_dept where dept_id = #{id}-->
+<!--    </select>-->
+
+    <select id="selectProcessInstanceId" resultType="java.lang.String">
+            SELECT process_instance_id FROM attend_business_register WHERE DATE(create_time) = CURRENT_DATE and del_flag = 0
+    </select>
+    <select id="findIdByProcessInstance" resultType="java.lang.String">
+            SELECT process_instance_id FROM attend_business_register WHERE id = #{id} and del_flag = 0
+    </select>
+</mapper>

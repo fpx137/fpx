@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.job.mapper.AttendProcurementMapper">
+
+    <resultMap type="com.ruoyi.job.domain.AttendProcurement" id="AttendProcurementResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="procurementMethod"    column="procurement_method"    />
+        <result property="procurementCategory"    column="procurement_category"    />
+        <result property="procurementContent"    column="procurement_content"    />
+        <result property="amount"    column="amount"    />
+        <result property="contractAnnex"    column="contract_annex"    />
+        <result property="state"    column="state"    />
+        <result property="processInstanceId"    column="process_instance_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updater"    column="updater"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectAttendProcurementVo">
+        select id, user_id, procurement_method, procurement_category, procurement_content, amount, contract_annex, state, process_instance_id, create_time, creator, update_time, updater, del_flag from attend_procurement
+    </sql>
+
+    <select id="selectAttendProcurementList" parameterType="com.ruoyi.job.domain.AttendProcurement" resultMap="AttendProcurementResult">
+        <include refid="selectAttendProcurementVo"/>
+            where del_flag = '0'
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="procurementMethod != null "> and procurement_method = #{procurementMethod}</if>
+            <if test="procurementCategory != null "> and procurement_category = #{procurementCategory}</if>
+            <if test="procurementContent != null  and procurementContent != ''"> and procurement_content = #{procurementContent}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="contractAnnex != null  and contractAnnex != ''"> and contract_annex = #{contractAnnex}</if>
+            <if test="state != null "> and states = #{state}</if>
+            <if test="processInstanceId != null  and processInstanceId != ''"> and process_instance_id = #{processInstanceId}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="updater != null  and updater != ''"> and updater = #{updater}</if>
+    </select>
+
+    <select id="selectAttendProcurementById" parameterType="Long" resultMap="AttendProcurementResult">
+        <include refid="selectAttendProcurementVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAttendProcurement" parameterType="com.ruoyi.job.domain.AttendProcurement" useGeneratedKeys="true" keyProperty="id">
+        insert into attend_procurement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="procurementMethod != null">procurement_method,</if>
+            <if test="procurementCategory != null">procurement_category,</if>
+            <if test="procurementContent != null">procurement_content,</if>
+            <if test="amount != null">amount,</if>
+            <if test="contractAnnex != null">contract_annex,</if>
+            <if test="state != null">state,</if>
+            <if test="processInstanceId != null">process_instance_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="creator != null">creator,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updater != null">updater,</if>
+            <if test="delFlag != null">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="procurementMethod != null">#{procurementMethod},</if>
+            <if test="procurementCategory != null">#{procurementCategory},</if>
+            <if test="procurementContent != null">#{procurementContent},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="contractAnnex != null">#{contractAnnex},</if>
+            <if test="state != null">#{state},</if>
+            <if test="processInstanceId != null">#{processInstanceId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updater != null">#{updater},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAttendProcurement" parameterType="com.ruoyi.job.domain.AttendProcurement">
+        update attend_procurement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="procurementMethod != null">procurement_method = #{procurementMethod},</if>
+            <if test="procurementCategory != null">procurement_category = #{procurementCategory},</if>
+            <if test="procurementContent != null">procurement_content = #{procurementContent},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="contractAnnex != null">contract_annex = #{contractAnnex},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="processInstanceId != null">process_instance_id = #{processInstanceId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAttendProcurementById" parameterType="Long">
+        delete from attend_procurement where id = #{id}
+    </delete>
+
+    <delete id="deleteAttendProcurementByIds" parameterType="String">
+        delete from attend_procurement where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectDingTalkUserIdByUserId" parameterType="Long"  resultType="com.ruoyi.job.vo.SysUserVo">
+        SELECT sau.dd_user_id ,su.dept_id FROM sys_user su left join  sys_auth_user sau on  su.user_id = sau.user_id  WHERE su.user_id=#{userId}
+    </select>
+
+</mapper>
