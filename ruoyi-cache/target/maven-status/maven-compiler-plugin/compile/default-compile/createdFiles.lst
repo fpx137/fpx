@@ -1,0 +1,10 @@
+com/ruoyi/cache/bean/UserData.class
+com/ruoyi/cache/bean/DeptData.class
+com/ruoyi/cache/loader/CacheLoader.class
+com/ruoyi/cache/bean/DictData.class
+com/ruoyi/cache/utils/CacheDeptUtils.class
+com/ruoyi/cache/bean/RlctConfigData.class
+com/ruoyi/cache/mapper/CacheManageMapper.class
+com/ruoyi/cache/utils/CacheDictUtils.class
+com/ruoyi/cache/utils/CacheUserUtils.class
+com/ruoyi/cache/service/CacheManageService.class

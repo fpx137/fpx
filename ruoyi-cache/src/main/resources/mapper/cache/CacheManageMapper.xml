@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.cache.mapper.CacheManageMapper">
+
+	<select id="selectAllDictData" resultType="com.ruoyi.cache.bean.DictData">
+		SELECT dict_label dictLabel,dict_value dictValue,dict_type dictType
+		from sys_dict_data
+		where status = 0 order by dict_type asc,dict_sort asc
+	</select>
+
+	<select id="selectAllDeptData" resultType="com.ruoyi.cache.bean.DeptData">
+		SELECT sd.dept_id deptId,sd.parent_id parentId,sd.dept_name deptName
+		from sys_dept sd where sd.status = 0 and sd.del_flag = 0
+	</select>
+
+
+	<select id="selectAllUserDataMapExcludeEnterprise" resultType="com.ruoyi.cache.bean.UserData">
+		select user_id userId,user_name userName,nick_name nickName,phonenumber
+		from sys_user where del_flag = '0'
+	</select>
+</mapper>
