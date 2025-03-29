@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.job.mapper.SysFlowMapper.AttendLeaveRegisterMapper">
+
+
+
+    <resultMap type="com.ruoyi.job.domain.SysFlow.AttendLeaveRegister" id="AttendLeaveRegisterResult">
+        <result property="id"    column="id"    />
+        <result property="leaveReason"    column="leave_reason"    />
+        <result property="leaveType"    column="leave_type"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="terminationTime"    column="termination_time"    />
+        <result property="state"    column="state"    />
+        <result property="processInstanceId"    column="process_instance_id"    />
+        <result property="leavePeople"    column="leave_people"    />
+        <result property="approvalPeople"    column="approval_people"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updater"    column="updater"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.job.vo.AttendLeaveRegisterVo" id="AttendLeaveRegisterVoResult">
+        <result property="id"    column="id"    />
+        <result property="leaveReason"    column="leave_reason"    />
+        <result property="leaveType"    column="leave_type"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="terminationTime"    column="termination_time"    />
+        <result property="state"    column="state"    />
+        <result property="processInstanceId"    column="process_instance_id"    />
+        <result property="leavePeople"    column="leave_people"    />
+        <result property="approvalPeople"    column="approval_people"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updater"    column="updater"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="nickname"    column="nick_name"    />
+        <result property="deptName"    column="dept_name"    />
+    </resultMap>
+
+
+<!--    <sql id="selectAttendLeaveRegisterVo">-->
+<!--        select id, leave_reason, leave_type, apply_time, start_time, end_time, termination_time, state, process_instance_id, leave_people, approval_people, approval_time, del_time, del_user, create_time, creator, update_time, updater, del_flag from attend_leave_register-->
+<!--    </sql>-->
+
+    <select id="selectAttendLeaveRegisterList" parameterType="com.ruoyi.job.vo.AttendLeaveRegisterVo" resultMap="AttendLeaveRegisterVoResult">
+        SELECT alr.id, leave_reason, leave_type, apply_time, start_time, end_time, termination_time, state, process_instance_id,sd.dept_name,
+               GROUP_CONCAT(DISTINCT tsu.nick_name) as leave_people,
+               GROUP_CONCAT(DISTINCT tsu_approval.nick_name) as approval_people,
+               approval_time, del_time, del_user, alr.create_time, creator, alr.update_time, updater, alr.del_flag
+        FROM attend_leave_register alr
+                 LEFT JOIN attend_user_leave aul ON alr.id = aul.leave_id
+                 LEFT JOIN sys_user tsu ON tsu.user_id = aul.user_id
+                 LEFT JOIN sys_user tsu_approval ON tsu_approval.user_id = alr.approval_people
+                 left join sys_dept sd on tsu.dept_id = sd.dept_id
+        WHERE alr.del_flag = 0
+        <if test="userId != null and userId != 1 and userId != 2">
+            AND tsu.user_id = #{userId}
+        </if>
+        GROUP BY alr.id, leave_reason, leave_type, apply_time, start_time, end_time, termination_time, state, process_instance_id,sd.dept_name,
+                 approval_time, del_time, del_user, alr.create_time, creator, alr.update_time, updater, alr.del_flag
+        ORDER BY alr.id DESC
+    </select>
+
+<!--    <select id="selectAttendLeaveRegisterById" parameterType="Integer" resultMap="AttendLeaveRegisterVoResult">-->
+<!--        SELECT alr.id, leave_reason, leave_type, apply_time, start_time, end_time, termination_time, state, process_instance_id, leave_people,-->
+<!--               GROUP_CONCAT(nick_name) AS nick_name,  &#45;&#45; 合并 nickname 字段-->
+<!--               approval_people, approval_time, del_time, del_user, alr.create_time, creator, alr.update_time, updater, alr.del_flag-->
+<!--        FROM attend_leave_register alr-->
+<!--                 LEFT JOIN attend_user_leave aul ON alr.id = aul.leave_id-->
+<!--                 LEFT JOIN sys_user tsu ON tsu.user_id = aul.user_id-->
+<!--        WHERE alr.del_flag = 0 AND alr.id = #{id}-->
+<!--    </select>-->
+
+    <insert id="insertAttendLeaveRegister" parameterType="com.ruoyi.job.domain.SysFlow.AttendLeaveRegister" useGeneratedKeys="true" keyProperty="id">
+        insert into attend_leave_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="leaveReason != null">leave_reason,</if>
+            <if test="leaveType != null">leave_type,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="terminationTime != null">termination_time,</if>
+            <if test="state != null">state,</if>
+            <if test="processInstanceId != null">process_instance_id,</if>
+            <if test="leavePeople != null">leave_people,</if>
+            <if test="approvalPeople != null">approval_people,</if>
+            <if test="approvalTime != null">approval_time,</if>
+            <if test="delTime != null">del_time,</if>
+            <if test="delUser != null">del_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="creator != null">creator,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updater != null">updater,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="leaveReason != null">#{leaveReason},</if>
+            <if test="leaveType != null">#{leaveType},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="terminationTime != null">#{terminationTime},</if>
+            <if test="state != null">#{state},</if>
+            <if test="processInstanceId != null">#{processInstanceId},</if>
+            <if test="leavePeople != null">#{leavePeople},</if>
+            <if test="approvalPeople != null">#{approvalPeople},</if>
+            <if test="approvalTime != null">#{approvalTime},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updater != null">#{updater},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+<!--    <update id="updateAttendLeaveRegister" parameterType="com.ruoyi.job.domain.SysFlow.AttendLeaveRegister">-->
+<!--        update attend_leave_register-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="leaveReason != null">leave_reason = #{leaveReason},</if>-->
+<!--            <if test="leaveType != null">leave_type = #{leaveType},</if>-->
+<!--            <if test="applyTime != null">apply_time = #{applyTime},</if>-->
+<!--            <if test="startTime != null">start_time = #{startTime},</if>-->
+<!--            <if test="endTime != null">end_time = #{endTime},</if>-->
+<!--            <if test="terminationTime != null">termination_time = #{terminationTime},</if>-->
+<!--            <if test="state != null">state = #{state},</if>-->
+<!--            <if test="processInstanceId != null">process_instance_id = #{processInstanceId},</if>-->
+<!--            <if test="leavePeople != null">leave_people = #{leavePeople},</if>-->
+<!--            <if test="approvalPeople != null">approval_people = #{approvalPeople},</if>-->
+<!--            <if test="approvalTime != null">approval_time = #{approvalTime},</if>-->
+<!--            <if test="delTime != null">del_time = #{delTime},</if>-->
+<!--            <if test="delUser != null">del_user = #{delUser},</if>-->
+<!--            <if test="createTime != null">create_time = #{createTime},</if>-->
+<!--            <if test="creator != null">creator = #{creator},</if>-->
+<!--            <if test="updateTime != null">update_time = #{updateTime},</if>-->
+<!--            <if test="updater != null">updater = #{updater},</if>-->
+<!--            <if test="delFlag != null">del_flag = #{delFlag},</if>-->
+<!--        </trim>-->
+<!--        where id = #{id} and del_flag = 0-->
+<!--    </update>-->
+
+<!--&lt;!&ndash;    逻辑删除&ndash;&gt;-->
+<!--    <update id="deleteAttendLeaveRegisterById" parameterType="Integer">-->
+<!--        update attend_leave_register set del_flag = 1 where id = #{id}-->
+<!--    </update>-->
+
+<!--    <update id="deleteAttendLeaveRegisterByIds" parameterType="String">-->
+<!--        update attend_leave_register set  del_flag = 1 where id in-->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </update>-->
+
+
+<!--    &lt;!&ndash;    将用户id和登记id存放到关系表&ndash;&gt;-->
+<!--    <insert id="insertUserLeave" parameterType="list">-->
+<!--        insert into attend_user_leave(user_id,leave_id) values-->
+<!--        <foreach item="data" collection="list" separator=",">-->
+<!--            (-->
+<!--                #{data.userId},-->
+<!--                #{data.registerId}-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    <insert id="insertUserLeaveOne">-->
+<!--        insert into attend_user_leave(user_id,leave_id) values (#{leavePeople},#{id})-->
+<!--    </insert>-->
+
+<!--&lt;!&ndash;    获取部门数据&ndash;&gt;-->
+<!--    <select id="selectDeptTree" resultType="java.util.LinkedHashMap">-->
+<!--        select dept_name, CAST(sd.dept_id AS CHAR)  AS "id",cast(sd.parent_id AS CHAR) as parentId-->
+<!--        from sys_dept sd-->
+<!--    </select>-->
+
+<!--&lt;!&ndash;根据部门id获取该部门下所有成员&ndash;&gt;-->
+<!--    <select id="selectUserByOrgid" resultMap="UserVoResult">-->
+<!--        select su.nick_name as nick_name,su.user_id,su.dept_id as org_id-->
+<!--        from sys_user su-->
+<!--        where su.dept_id = #{orgid}-->
+<!--    </select>-->
+
+    <update id="updateStateByProcessInstanceId">
+        update attend_leave_register
+        set state = #{state},
+            update_time = #{updateTime},
+            updater = #{updater}
+        where process_instance_id = #{processInstanceId}
+    </update>
+
+    <select id="selectProcessInstanceIds" resultType="java.lang.String">
+        SELECT process_instance_id
+        FROM attend_leave_register
+        where process_instance_id = #{processInstanceId}
+    </select>
+
+    <select id="selectProcessInstanceId" resultType="java.lang.String">
+        SELECT process_instance_id FROM attend_leave_register WHERE state = 0 and del_flag = 0
+    </select>
+
+
+
+    <select id="findIdByProcessInstance" resultType="java.lang.String">
+        SELECT process_instance_id FROM attend_leave_register WHERE id = #{id} and del_flag = 0
+    </select>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.job.mapper.AttendRecordDayStaticsMapper">
+
+    <resultMap type="com.ruoyi.job.domain.AttendRecordDayStatics" id="AttendRecordDayStaticsResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="staticsDate"    column="statics_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="dutyTime1"    column="duty_time1"    />
+        <result property="dutyTime2"    column="duty_time2"    />
+        <result property="dutyTime3"    column="duty_time3"    />
+        <result property="dutyTime4"    column="duty_time4"    />
+        <result property="dutyTime1State"    column="duty_time1_state"    />
+        <result property="dutyTime2State"    column="duty_time2_state"    />
+        <result property="dutyTime3State"    column="duty_time3_state"    />
+        <result property="dutyTime4State"    column="duty_time4_state"    />
+        <result property="dutyTime1Remark"    column="duty_time1_remark"    />
+        <result property="dutyTime2Remark"    column="duty_time2_remark"    />
+        <result property="dutyTime3Remark"    column="duty_time3_remark"    />
+        <result property="dutyTime4Remark"    column="duty_time4_remark"    />
+        <result property="delayTimes"    column="delay_times"    />
+        <result property="delayDurationTime"    column="delay_duration_time"    />
+        <result property="earlyTimes"    column="early_times"    />
+        <result property="earlyDurationTime"    column="early_duration_time"    />
+        <result property="unUpWorkTimes"    column="un_up_work_times"    />
+        <result property="unDownWorkTimes"    column="un_down_work_times"    />
+        <result property="outgoingDays"    column="outgoing_days"    />
+        <result property="leaveDays"    column="leave_days"    />
+        <result property="businessDays"    column="business_days"    />
+        <result property="overtimeDays"    column="overtime_days"    />
+        <result property="absenteeismDays"    column="absenteeism_days"    />
+        <result property="normalDays"    column="normal_days"    />
+    </resultMap>
+
+    <sql id="selectAttendRecordDayStaticsVo">
+        select id, user_id, statics_date, create_time, duty_time1, duty_time2, duty_time3, duty_time4, duty_time1_state, duty_time2_state, duty_time3_state, duty_time4_state, duty_time1_remark, duty_time2_remark, duty_time3_remark, duty_time4_remark, delay_times, delay_duration_time, early_times, early_duration_time, un_up_work_times, un_down_work_times, outgoing_days, leave_days, business_days, overtime_days, absenteeism_days, normal_days from attend_record_day_statics
+    </sql>
+
+    <select id="selectAttendRecordDayStaticsList" parameterType="com.ruoyi.job.domain.AttendRecordDayStatics" resultMap="AttendRecordDayStaticsResult">
+        <include refid="selectAttendRecordDayStaticsVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="staticsDate != null "> and statics_date = #{staticsDate}</if>
+            <if test="dutyTime1 != null "> and duty_time1 = #{dutyTime1}</if>
+            <if test="dutyTime2 != null "> and duty_time2 = #{dutyTime2}</if>
+            <if test="dutyTime3 != null "> and duty_time3 = #{dutyTime3}</if>
+            <if test="dutyTime4 != null "> and duty_time4 = #{dutyTime4}</if>
+            <if test="dutyTime1State != null  and dutyTime1State != ''"> and duty_time1_state = #{dutyTime1State}</if>
+            <if test="dutyTime2State != null  and dutyTime2State != ''"> and duty_time2_state = #{dutyTime2State}</if>
+            <if test="dutyTime3State != null  and dutyTime3State != ''"> and duty_time3_state = #{dutyTime3State}</if>
+            <if test="dutyTime4State != null  and dutyTime4State != ''"> and duty_time4_state = #{dutyTime4State}</if>
+            <if test="dutyTime1Remark != null  and dutyTime1Remark != ''"> and duty_time1_remark = #{dutyTime1Remark}</if>
+            <if test="dutyTime2Remark != null  and dutyTime2Remark != ''"> and duty_time2_remark = #{dutyTime2Remark}</if>
+            <if test="dutyTime3Remark != null  and dutyTime3Remark != ''"> and duty_time3_remark = #{dutyTime3Remark}</if>
+            <if test="dutyTime4Remark != null  and dutyTime4Remark != ''"> and duty_time4_remark = #{dutyTime4Remark}</if>
+            <if test="delayTimes != null "> and delay_times = #{delayTimes}</if>
+            <if test="delayDurationTime != null "> and delay_duration_time = #{delayDurationTime}</if>
+            <if test="earlyTimes != null "> and early_times = #{earlyTimes}</if>
+            <if test="earlyDurationTime != null "> and early_duration_time = #{earlyDurationTime}</if>
+            <if test="unUpWorkTimes != null "> and un_up_work_times = #{unUpWorkTimes}</if>
+            <if test="unDownWorkTimes != null "> and un_down_work_times = #{unDownWorkTimes}</if>
+            <if test="outgoingDays != null "> and outgoing_days = #{outgoingDays}</if>
+            <if test="leaveDays != null "> and leave_days = #{leaveDays}</if>
+            <if test="businessDays != null "> and business_days = #{businessDays}</if>
+            <if test="overtimeDays != null "> and overtime_days = #{overtimeDays}</if>
+            <if test="absenteeismDays != null "> and absenteeism_days = #{absenteeismDays}</if>
+            <if test="normalDays != null "> and normal_days = #{normalDays}</if>
+        </where>
+    </select>
+
+    <select id="selectAttendRecordDayStaticsById" parameterType="Long" resultMap="AttendRecordDayStaticsResult">
+        <include refid="selectAttendRecordDayStaticsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAttendRecordDayStatics" parameterType="com.ruoyi.job.domain.AttendRecordDayStatics">
+        insert into attend_record_day_statics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="staticsDate != null">statics_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="dutyTime1 != null">duty_time1,</if>
+            <if test="dutyTime2 != null">duty_time2,</if>
+            <if test="dutyTime3 != null">duty_time3,</if>
+            <if test="dutyTime4 != null">duty_time4,</if>
+            <if test="dutyTime1State != null">duty_time1_state,</if>
+            <if test="dutyTime2State != null">duty_time2_state,</if>
+            <if test="dutyTime3State != null">duty_time3_state,</if>
+            <if test="dutyTime4State != null">duty_time4_state,</if>
+            <if test="dutyTime1Remark != null">duty_time1_remark,</if>
+            <if test="dutyTime2Remark != null">duty_time2_remark,</if>
+            <if test="dutyTime3Remark != null">duty_time3_remark,</if>
+            <if test="dutyTime4Remark != null">duty_time4_remark,</if>
+            <if test="delayTimes != null">delay_times,</if>
+            <if test="delayDurationTime != null">delay_duration_time,</if>
+            <if test="earlyTimes != null">early_times,</if>
+            <if test="earlyDurationTime != null">early_duration_time,</if>
+            <if test="unUpWorkTimes != null">un_up_work_times,</if>
+            <if test="unDownWorkTimes != null">un_down_work_times,</if>
+            <if test="outgoingDays != null">outgoing_days,</if>
+            <if test="leaveDays != null">leave_days,</if>
+            <if test="businessDays != null">business_days,</if>
+            <if test="overtimeDays != null">overtime_days,</if>
+            <if test="absenteeismDays != null">absenteeism_days,</if>
+            <if test="normalDays != null">normal_days,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="staticsDate != null">#{staticsDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="dutyTime1 != null">#{dutyTime1},</if>
+            <if test="dutyTime2 != null">#{dutyTime2},</if>
+            <if test="dutyTime3 != null">#{dutyTime3},</if>
+            <if test="dutyTime4 != null">#{dutyTime4},</if>
+            <if test="dutyTime1State != null">#{dutyTime1State},</if>
+            <if test="dutyTime2State != null">#{dutyTime2State},</if>
+            <if test="dutyTime3State != null">#{dutyTime3State},</if>
+            <if test="dutyTime4State != null">#{dutyTime4State},</if>
+            <if test="dutyTime1Remark != null">#{dutyTime1Remark},</if>
+            <if test="dutyTime2Remark != null">#{dutyTime2Remark},</if>
+            <if test="dutyTime3Remark != null">#{dutyTime3Remark},</if>
+            <if test="dutyTime4Remark != null">#{dutyTime4Remark},</if>
+            <if test="delayTimes != null">#{delayTimes},</if>
+            <if test="delayDurationTime != null">#{delayDurationTime},</if>
+            <if test="earlyTimes != null">#{earlyTimes},</if>
+            <if test="earlyDurationTime != null">#{earlyDurationTime},</if>
+            <if test="unUpWorkTimes != null">#{unUpWorkTimes},</if>
+            <if test="unDownWorkTimes != null">#{unDownWorkTimes},</if>
+            <if test="outgoingDays != null">#{outgoingDays},</if>
+            <if test="leaveDays != null">#{leaveDays},</if>
+            <if test="businessDays != null">#{businessDays},</if>
+            <if test="overtimeDays != null">#{overtimeDays},</if>
+            <if test="absenteeismDays != null">#{absenteeismDays},</if>
+            <if test="normalDays != null">#{normalDays},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAttendRecordDayStatics" parameterType="com.ruoyi.job.domain.AttendRecordDayStatics">
+        update attend_record_day_statics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="staticsDate != null">statics_date = #{staticsDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="dutyTime1 != null">duty_time1 = #{dutyTime1},</if>
+            <if test="dutyTime2 != null">duty_time2 = #{dutyTime2},</if>
+            <if test="dutyTime3 != null">duty_time3 = #{dutyTime3},</if>
+            <if test="dutyTime4 != null">duty_time4 = #{dutyTime4},</if>
+            <if test="dutyTime1State != null">duty_time1_state = #{dutyTime1State},</if>
+            <if test="dutyTime2State != null">duty_time2_state = #{dutyTime2State},</if>
+            <if test="dutyTime3State != null">duty_time3_state = #{dutyTime3State},</if>
+            <if test="dutyTime4State != null">duty_time4_state = #{dutyTime4State},</if>
+            <if test="dutyTime1Remark != null">duty_time1_remark = #{dutyTime1Remark},</if>
+            <if test="dutyTime2Remark != null">duty_time2_remark = #{dutyTime2Remark},</if>
+            <if test="dutyTime3Remark != null">duty_time3_remark = #{dutyTime3Remark},</if>
+            <if test="dutyTime4Remark != null">duty_time4_remark = #{dutyTime4Remark},</if>
+            <if test="delayTimes != null">delay_times = #{delayTimes},</if>
+            <if test="delayDurationTime != null">delay_duration_time = #{delayDurationTime},</if>
+            <if test="earlyTimes != null">early_times = #{earlyTimes},</if>
+            <if test="earlyDurationTime != null">early_duration_time = #{earlyDurationTime},</if>
+            <if test="unUpWorkTimes != null">un_up_work_times = #{unUpWorkTimes},</if>
+            <if test="unDownWorkTimes != null">un_down_work_times = #{unDownWorkTimes},</if>
+            <if test="outgoingDays != null">outgoing_days = #{outgoingDays},</if>
+            <if test="leaveDays != null">leave_days = #{leaveDays},</if>
+            <if test="businessDays != null">business_days = #{businessDays},</if>
+            <if test="overtimeDays != null">overtime_days = #{overtimeDays},</if>
+            <if test="absenteeismDays != null">absenteeism_days = #{absenteeismDays},</if>
+            <if test="normalDays != null">normal_days = #{normalDays},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAttendRecordDayStaticsById" parameterType="Long">
+        delete from attend_record_day_statics where id = #{id}
+    </delete>
+
+    <delete id="deleteAttendRecordDayStaticsByIds" parameterType="String">
+        delete from attend_record_day_statics where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByUserIdAndDate">
+        delete from attend_record_day_statics t
+        where t.user_id = #{userId}
+        and  to_days(t.statics_date) = to_days(#{date})
+    </delete>
+
+    <select id="selectRecordRegisterVoByUserIdAndDate" resultType="com.ruoyi.job.vo.RecordRegisterVo">
+        SELECT t.id,t.record_config_id recordConfigId,t.user_id userId, c.record_order recordOrder,
+               c.record_type recordType,c.record_time recordTime,
+               t.register_time registerTime,t.remark
+        from attend_record_register t
+                 inner join attend_record_config c on c.id = t.record_config_id
+        where t.user_id = #{userId}
+          and to_days(t.register_time) = to_days(#{date})
+    </select>
+
+    <select id="findAllUser" resultType="com.ruoyi.job.vo.UserVo">
+        select t.user_id userId from sys_user t
+        where user_type = '00'
+    </select>
+
+    <select id="findLeaveByUserId" resultType="com.ruoyi.job.domain.SysFlow.AttendLeaveRegister">
+        SELECT t.id, t.leave_type leaveType, t.start_time startTime, t.end_time endTime from attend_leave_register t
+        where t.state = 3
+          and TO_DAYS(t.start_time)  <![CDATA[ <= ]]> TO_DAYS(#{date})
+          and TO_DAYS(t.end_time)   <![CDATA[ >= ]]> TO_DAYS(#{date})
+          and t.leave_people = #{userId}
+          and t.del_flag = 0
+    </select>
+
+    <select id="findBusinessByUserId" resultType="com.ruoyi.job.domain.SysFlow.AttendBusinessRegister">
+        SELECT t.id, t.start_time startTime, t.end_time endTime from attend_business_register t
+        where t.state = 3
+          and TO_DAYS(t.start_time)  <![CDATA[ <= ]]> TO_DAYS(#{date})
+          and TO_DAYS(t.end_time)   <![CDATA[ >= ]]> TO_DAYS(#{date})
+          and t.business_people = #{userId}
+          and t.del_flag = 0
+    </select>
+
+    <select id="findOutgoingByUserId" resultType="com.ruoyi.job.domain.SysFlow.AttendOutgoingRegister">
+        SELECT t.id, t.start_time startTime, t.end_time endTime from attend_outgoing_register t
+        where t.state = 3
+          and TO_DAYS(t.start_time)  <![CDATA[ <= ]]> TO_DAYS(#{date})
+          and TO_DAYS(t.end_time)   <![CDATA[ >= ]]> TO_DAYS(#{date})
+          and t.outgoing_people = #{userId}
+          and t.del_flag = 0
+    </select>
+</mapper>
